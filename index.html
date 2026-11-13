@@ -1,14 +1,380 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#15324b"><meta name="description" content="A private, customizable monthly budget tracker."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg"><link rel="stylesheet" href="./styles.css"><title>My Budget</title></head>
-<body><header class="topbar"><div class="brand"><span class="brand-mark">₹</span><div><strong>My Budget</strong><small>Private money tracker</small></div></div><button class="icon-button" id="settings-open" aria-label="Settings">⚙</button></header>
-<main><section class="month-row"><button class="icon-button" id="month-prev">‹</button><div><div class="eyebrow">BUDGET PERIOD</div><input id="month-picker" type="month" aria-label="Choose month"></div><button class="icon-button" id="month-next">›</button></section>
-<section class="hero card"><div class="hero-heading"><div><div class="eyebrow">SPENDING PLAN</div><h1 id="hero-budget">₹3,000</h1></div><span class="pill" id="month-state">THIS MONTH</span></div><div class="progress"><span id="overall-progress"></span></div><div class="hero-foot"><span id="spent-summary"></span><span id="left-summary"></span></div><div class="hero-note" id="hero-note"></div></section>
-<div class="section-heading"><div><h2>Spending</h2><p>Available includes any amount carried forward.</p></div><button class="text-button" id="add-transaction">＋ Add</button></div><section id="spending-list" class="category-list"></section>
-<div class="section-heading"><div><h2>Protected funds</h2><p>Use only for the fund’s purpose.</p></div></div><section id="reserve-list" class="category-list"></section>
-<div class="section-heading"><div><h2>Recent activity</h2><p>Tap an entry to remove it.</p></div></div><section id="activity-list" class="activity-list"></section><div class="privacy-note">🔒 Your data stays on this device. Export a backup regularly.</div></main>
-<nav class="bottom-nav"><a href="#top" class="active">◉ <span>Overview</span></a><button id="quick-add">＋ <span>Add entry</span></button><button id="settings-nav">⚙ <span>Plan &amp; data</span></button></nav>
-<dialog id="transaction-dialog"><form id="transaction-form"><div class="dialog-head"><div><div class="eyebrow">RECORD ACTIVITY</div><h2 id="transaction-title">Add an expense</h2></div><button class="icon-button" type="button" data-close="transaction-dialog">×</button></div><label>Amount (₹)<input id="tx-amount" type="number" min="1" step="1" inputmode="decimal" required></label><label>Type<select id="tx-type"><option value="spend">Spending</option><option value="reserve">Use a reserve</option></select></label><label>Category<select id="tx-category" required></select></label><label>Date<input id="tx-date" type="date" required></label><label>Note (optional)<input id="tx-note" maxlength="80" placeholder="What was it for?"></label><button class="primary-button" id="tx-submit">Save entry</button></form></dialog>
-<dialog id="settings-dialog" class="wide-dialog"><form id="settings-form"><div class="dialog-head"><div><div class="eyebrow">MAKE IT YOURS</div><h2>Plan &amp; settings</h2></div><button class="icon-button" type="button" data-close="settings-dialog">×</button></div><div class="settings-scroll">
-<div class="settings-callout">Change names, amounts and fund types here. Changes apply to all months. Choose when tracking begins.</div><div class="settings-grid"><label>Currency symbol<input id="set-currency" maxlength="4"></label><label>Monthly plan total (₹)<input id="set-total" type="number" min="0"></label><label class="full">Tracking starts in<input id="set-start" type="month"></label><label class="full">Essential hostel and meal costs covered separately?<select id="set-essentials"><option value="yes">Yes</option><option value="no">No - revise the plan</option></select></label></div>
-<div class="setting-title"><h3>Categories &amp; monthly amounts</h3><button class="text-button" id="category-add" type="button">＋ Category</button></div><div id="settings-categories" class="settings-categories"></div>
-<div class="account-settings"><h3>Account labels</h3><div class="settings-grid"><label>Everyday spending<input id="set-spend-account"></label><label>Reserves<input id="set-reserve-account"></label></div><p class="muted">Labels only; this app never connects to your bank.</p></div>
-<div class="data-settings"><h3>Your data</h3><p class="muted">Stored in this browser on this device.</p><div class="button-row"><button type="button" class="secondary-button" id="export-data">Download backup</button><button type="button" class="secondary-button" id="import-data">Restore backup</button><input id="import-file" type="file" accept="application/json,.json" hidden></div><button type="button" class="danger-button" id="reset-data">Reset all data</button></div><p class="muted">Open source under the MIT License. Edit the app files and publish your own copy.</p></div><button class="primary-button sticky-save">Save changes</button></form></dialog><div id="toast" role="status" aria-live="polite"></div><script src="./app.js"></script></body></html>
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+  <meta name="theme-color" content="#173d30">
+  <meta name="description" content="FUNDA — Financially Unstable, Never Done Adjusting. കാശിന്റെ കണക്ക്, സിമ്പിളായി.">
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg">
+  <link rel="stylesheet" href="./styles.css">
+
+  <title>FUNDA — കാശിന്റെ കണക്ക്</title>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">₹</span>
+    <div>
+      <strong>FUNDA</strong>
+      <small>Financially Unstable, Never Done Adjusting.</small>
+    </div>
+  </div>
+
+  <button class="icon-button" id="settings-open" aria-label="Settings">⚙</button>
+</header>
+
+<main>
+
+  <!-- MONTH SELECTOR -->
+
+  <section class="month-row">
+    <button class="icon-button" id="month-prev">‹</button>
+
+    <div>
+      <div class="eyebrow">ഇപ്പോ ഏത് മാസം?</div>
+      <input id="month-picker" type="month" aria-label="Choose month">
+    </div>
+
+    <button class="icon-button" id="month-next">›</button>
+  </section>
+
+
+  <!-- MAIN BUDGET -->
+
+  <section class="hero card">
+
+    <div class="hero-heading">
+      <div>
+        <div class="eyebrow">ഈ മാസത്തെ പ്ലാൻ</div>
+        <h1 id="hero-budget">₹3,000</h1>
+      </div>
+
+      <span class="pill" id="month-state">ഈ മാസം</span>
+    </div>
+
+    <div class="progress">
+      <span id="overall-progress"></span>
+    </div>
+
+    <div class="hero-foot">
+      <span id="spent-summary"></span>
+      <span id="left-summary"></span>
+    </div>
+
+    <div class="hero-note" id="hero-note"></div>
+
+  </section>
+
+
+  <!-- SPENDING CATEGORIES -->
+
+  <div class="section-heading">
+    <div>
+      <h2>പൈസ എവിടെയൊക്കെ പോയി?</h2>
+      <p>ചെലവിന്റെ കണക്ക് ഇവിടെ കാണാം.</p>
+    </div>
+
+    <button class="text-button" id="add-transaction">
+      ＋ ചെലവ് ചേർക്കാം
+    </button>
+  </div>
+
+  <section id="spending-list" class="category-list"></section>
+
+
+  <!-- PROTECTED FUNDS -->
+
+  <div class="section-heading">
+    <div>
+      <h2>തൊടരുതാത്ത പൈസ!</h2>
+      <p>ആവശ്യത്തിന് മാത്രം എടുത്താൽ മതി.</p>
+    </div>
+  </div>
+
+  <section id="reserve-list" class="category-list"></section>
+
+
+  <!-- RECENT TRANSACTIONS -->
+
+  <div class="section-heading">
+    <div>
+      <h2>അവസാനം നടന്നത്</h2>
+      <p>പൈസ പോയ വഴികൾ ഒന്ന് നോക്കാം.</p>
+    </div>
+  </div>
+
+  <section id="activity-list" class="activity-list"></section>
+
+
+  <!-- PRIVACY -->
+
+  <div class="privacy-note">
+    🔒 നിന്റെ കണക്ക് നിന്റെ ഫോണിൽ തന്നെ.
+    ഇടയ്ക്കൊക്കെ ഒരു backup എടുത്തേക്കണേ!
+  </div>
+
+</main>
+
+
+<!-- BOTTOM NAVIGATION -->
+
+<nav class="bottom-nav">
+
+  <a href="#top" class="active">
+    ◉
+    <span>എന്റെ കണക്ക്</span>
+  </a>
+
+  <button id="quick-add">
+    ＋
+    <span>ചെലവ് ചേർക്കാം</span>
+  </button>
+
+  <button id="settings-nav">
+    ⚙
+    <span>സെറ്റിംഗ്സ്</span>
+  </button>
+
+</nav>
+
+
+<!-- ADD TRANSACTION DIALOG -->
+
+<dialog id="transaction-dialog">
+
+  <form id="transaction-form">
+
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">കണക്കിൽ ചേർക്കാം</div>
+        <h2 id="transaction-title">ഒരു ചെലവ് ചേർക്കാം</h2>
+      </div>
+
+      <button class="icon-button"
+              type="button"
+              data-close="transaction-dialog">×</button>
+    </div>
+
+
+    <label>
+      എത്ര രൂപ പോയി? (₹)
+      <input id="tx-amount"
+             type="number"
+             min="1"
+             step="1"
+             inputmode="decimal"
+             required>
+    </label>
+
+
+    <label>
+      എന്ത് ചെയ്യാനാണ്?
+      <select id="tx-type">
+        <option value="spend">ചെലവാക്കി</option>
+        <option value="reserve">Reserve-ൽ നിന്ന് എടുത്തു</option>
+      </select>
+    </label>
+
+
+    <label>
+      ഏത് വിഭാഗം?
+      <select id="tx-category" required></select>
+    </label>
+
+
+    <label>
+      തീയതി
+      <input id="tx-date" type="date" required>
+    </label>
+
+
+    <label>
+      എന്തിനായിരുന്നു? (Optional)
+      <input id="tx-note"
+             maxlength="80"
+             placeholder="ചായ, ബസ്, സിനിമ...">
+    </label>
+
+
+    <button class="primary-button" id="tx-submit">
+      കണക്ക് ചേർക്കാം
+    </button>
+
+  </form>
+
+</dialog>
+
+
+<!-- SETTINGS DIALOG -->
+
+<dialog id="settings-dialog" class="wide-dialog">
+
+  <form id="settings-form">
+
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">നിന്റെ ഇഷ്ടത്തിന് മാറ്റാം</div>
+        <h2>പ്ലാനും സെറ്റിംഗ്സും</h2>
+      </div>
+
+      <button class="icon-button"
+              type="button"
+              data-close="settings-dialog">×</button>
+    </div>
+
+
+    <div class="settings-scroll">
+
+      <div class="settings-callout">
+        നിന്റെ ബജറ്റ്, വിഭാഗങ്ങൾ, തുകകൾ എല്ലാം ഇവിടെ മാറ്റാം.
+        കണക്ക് തുടങ്ങുന്ന മാസവും തിരഞ്ഞെടുക്കാം.
+        ഇഷ്ടമുള്ള പോലെ സെറ്റ് ചെയ്തോളൂ!
+      </div>
+
+
+      <!-- GENERAL SETTINGS -->
+
+      <div class="settings-grid">
+
+        <label>
+          കറൻസി ചിഹ്നം
+          <input id="set-currency" maxlength="4">
+        </label>
+
+        <label>
+          മാസ ബജറ്റ് (₹)
+          <input id="set-total" type="number" min="0">
+        </label>
+
+        <label class="full">
+          കണക്ക് തുടങ്ങുന്ന മാസം
+          <input id="set-start" type="month">
+        </label>
+
+        <label class="full">
+          ഹോസ്റ്റൽ, ഭക്ഷണ ചെലവുകൾ വേറെ കവർ ചെയ്യുന്നുണ്ടോ?
+          <select id="set-essentials">
+            <option value="yes">അതെ</option>
+            <option value="no">ഇല്ല - ബജറ്റ് മാറ്റണം</option>
+          </select>
+        </label>
+
+      </div>
+
+
+      <!-- CATEGORIES -->
+
+      <div class="setting-title">
+        <h3>വിഭാഗങ്ങളും മാസത്തുകകളും</h3>
+
+        <button class="text-button"
+                id="category-add"
+                type="button">
+          ＋ പുതിയ വിഭാഗം
+        </button>
+      </div>
+
+      <div id="settings-categories" class="settings-categories"></div>
+
+
+      <!-- ACCOUNTS -->
+
+      <div class="account-settings">
+
+        <h3>അക്കൗണ്ട് പേരുകൾ</h3>
+
+        <div class="settings-grid">
+
+          <label>
+            ദൈനംദിന ചെലവുകൾ
+            <input id="set-spend-account">
+          </label>
+
+          <label>
+            മാറ്റിവെച്ച തുക
+            <input id="set-reserve-account">
+          </label>
+
+        </div>
+
+        <p class="muted">
+          പേരുകൾ മാത്രമാണ്. ഈ ആപ്പ് ബാങ്കുമായി ബന്ധിപ്പിച്ചിട്ടില്ല.
+        </p>
+
+      </div>
+
+
+      <!-- DATA MANAGEMENT -->
+
+      <div class="data-settings">
+
+        <h3>നിന്റെ ഡാറ്റ</h3>
+
+        <p class="muted">
+          കണക്കുകൾ ഈ ബ്രൗസറിൽ തന്നെ സൂക്ഷിക്കുന്നു.
+        </p>
+
+        <div class="button-row">
+
+          <button type="button"
+                  class="secondary-button"
+                  id="export-data">
+            Backup ഡൗൺലോഡ്
+          </button>
+
+          <button type="button"
+                  class="secondary-button"
+                  id="import-data">
+            Backup തിരിച്ചെടുക്കാം
+          </button>
+
+          <input id="import-file"
+                 type="file"
+                 accept="application/json,.json"
+                 hidden>
+
+        </div>
+
+        <button type="button"
+                class="danger-button"
+                id="reset-data">
+          എല്ലാ കണക്കുകളും Reset ചെയ്യാം
+        </button>
+
+      </div>
+
+
+      <p class="muted">
+        FUNDA — Financially Unstable, Never Done Adjusting.
+        Open source under the MIT License.
+      </p>
+
+    </div>
+
+
+    <button class="primary-button sticky-save">
+      മാറ്റങ്ങൾ സേവ് ചെയ്യാം
+    </button>
+
+  </form>
+
+</dialog>
+
+
+<!-- TOAST NOTIFICATION -->
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+
+<!-- APPLICATION SCRIPT -->
+
+<script src="./app.js"></script>
+
+</body>
+</html>
