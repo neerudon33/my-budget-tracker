@@ -1,16 +1,16 @@
 
-const CACHE = 'funda-v2';
+const CACHE = 'funda-v3';
 
 const FILES = [
   './',
   './index.html',
-  './styles.css',
-  './app.js',
+  './styles.css?v=2',
+  './app.js?v=2',
   './manifest.webmanifest',
   './icon.svg'
 ];
 
-// Install and prepare the new cache
+// INSTALL
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE)
@@ -19,14 +19,16 @@ self.addEventListener('install', event => {
   );
 });
 
-// Remove old caches
+// ACTIVATE
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
       .then(keys =>
         Promise.all(
           keys
-            .filter(key => key !== CACHE)
+            .filter(key =>
+              key.startsWith('funda-') && key !== CACHE
+            )
             .map(key => caches.delete(key))
         )
       )
@@ -34,7 +36,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Network first, cache fallback
+// FETCH: NETWORK FIRST
 self.addEventListener('fetch', event => {
   const request = event.request;
 
@@ -45,27 +47,38 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    fetch(request, { cache: 'no-cache' })
-      .then(response => {
-        if (response.ok) {
-          const copy = response.clone();
+    (async () => {
+      try {
+        const response = await fetch(request, {
+          cache: 'no-cache'
+        });
 
-          caches.open(CACHE)
-            .then(cache => cache.put(request, copy));
+        if (response.ok) {
+          const cache = await caches.open(CACHE);
+
+          await cache.put(request, response.clone());
         }
 
         return response;
-      })
-      .catch(async () => {
+
+      } catch (error) {
         const cached = await caches.match(request);
 
         if (cached) return cached;
 
         if (request.mode === 'navigate') {
-          return caches.match('./index.html');
+          const fallback = await caches.match('./index.html');
+
+          if (fallback) return fallback;
         }
 
-        return Response.error();
-      })
+        return new Response('Offline - Please reconnect to the internet.', {
+          status: 503,
+          headers: {
+            'Content-Type': 'text/plain'
+          }
+        });
+      }
+    })()
   );
 });
