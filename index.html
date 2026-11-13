@@ -3,386 +3,391 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <meta name="theme-color" content="#173d30">
-  <meta name="description" content="FUNDA — Financially Unstable, Never Done Adjusting. Your money, your rules.">
+  <meta name="description" content="FUNDA — Financially Unstable, Never Done Adjusting. Track expenses, manage your monthly budget and keep your money in check.">
 
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=2">
 
   <title>FUNDA — Your Money, Your Rules.</title>
 </head>
 
 <body>
 
-<header class="topbar">
-  <div class="brand">
-    <span class="brand-mark">₹</span>
-    <div>
-      <strong>FUNDA</strong>
-      <small>Financially Unstable, Never Done Adjusting.</small>
-    </div>
-  </div>
+  <!-- HEADER -->
 
-  <button class="icon-button" id="settings-open" aria-label="Settings">⚙</button>
-</header>
-
-<main id="top">
-
-  <!-- MONTH SELECTOR -->
-
-  <section class="month-row">
-    <button class="icon-button" id="month-prev" aria-label="Previous month">‹</button>
-
-    <div>
-      <div class="eyebrow">YOUR MONEY, THIS MONTH</div>
-      <input id="month-picker" type="month" aria-label="Choose month">
-    </div>
-
-    <button class="icon-button" id="month-next" aria-label="Next month">›</button>
-  </section>
-
-
-  <!-- MAIN BUDGET -->
-
-  <section class="hero card">
-
-    <div class="hero-heading">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">₹</span>
       <div>
-        <div class="eyebrow">MONTHLY SPENDING PLAN</div>
-        <h1 id="hero-budget">₹3,000</h1>
+        <strong>FUNDA</strong>
+        <small>Financially Unstable, Never Done Adjusting.</small>
+      </div>
+    </div>
+
+    <button class="icon-button" id="settings-open" aria-label="Settings">⚙</button>
+  </header>
+
+
+  <main id="top">
+
+    <!-- MONTH SELECTOR -->
+
+    <section class="month-row">
+      <button class="icon-button" id="month-prev" aria-label="Previous month">‹</button>
+
+      <div>
+        <div class="eyebrow">YOUR MONEY, THIS MONTH</div>
+        <input id="month-picker" type="month" aria-label="Choose month">
       </div>
 
-      <span class="pill" id="month-state">THIS MONTH</span>
-    </div>
-
-    <div class="progress">
-      <span id="overall-progress"></span>
-    </div>
-
-    <div class="hero-foot">
-      <span id="spent-summary"></span>
-      <span id="left-summary"></span>
-    </div>
-
-    <div class="hero-note" id="hero-note"></div>
-
-  </section>
+      <button class="icon-button" id="month-next" aria-label="Next month">›</button>
+    </section>
 
 
-  <!-- SPENDING CATEGORIES -->
+    <!-- MAIN BUDGET -->
 
-  <div class="section-heading">
-    <div>
-      <h2>Where did it go?</h2>
-      <p>പൈസ പോയ വഴികൾ ഒന്ന് നോക്കാം.</p>
-    </div>
+    <section class="hero card">
 
-    <button class="text-button" id="add-transaction">
-      ＋ Add expense
-    </button>
-  </div>
+      <div class="hero-heading">
+        <div>
+          <div class="eyebrow">MONTHLY SPENDING PLAN</div>
+          <h1 id="hero-budget">₹3,000</h1>
+        </div>
 
-  <section id="spending-list" class="category-list"></section>
-
-
-  <!-- PROTECTED FUNDS -->
-
-  <div class="section-heading">
-    <div>
-      <h2>Hands Off! Funds</h2>
-      <p>നല്ല കാര്യത്തിന് മാറ്റിവെച്ചത്.</p>
-    </div>
-  </div>
-
-  <section id="reserve-list" class="category-list"></section>
-
-
-  <!-- RECENT TRANSACTIONS -->
-
-  <div class="section-heading">
-    <div>
-      <h2>Recent Activity</h2>
-      <p>Where your money went lately.</p>
-    </div>
-  </div>
-
-  <section id="activity-list" class="activity-list"></section>
-
-
-  <!-- PRIVACY -->
-
-  <div class="privacy-note">
-    🔒 Your money matters. Your data stays yours.
-    <br>
-    ഇടയ്ക്കൊക്കെ backup എടുത്തേക്കണേ!
-  </div>
-
-</main>
-
-
-<!-- BOTTOM NAVIGATION -->
-
-<nav class="bottom-nav">
-
-  <a href="#top" class="active">
-    ◉
-    <span>Overview</span>
-  </a>
-
-  <button id="quick-add">
-    ＋
-    <span>Add entry</span>
-  </button>
-
-  <button id="settings-nav">
-    ⚙
-    <span>My Plan</span>
-  </button>
-
-</nav>
-
-
-<!-- ADD TRANSACTION DIALOG -->
-
-<dialog id="transaction-dialog">
-
-  <form id="transaction-form">
-
-    <div class="dialog-head">
-      <div>
-        <div class="eyebrow">KEEP TRACK</div>
-        <h2 id="transaction-title">Add an expense</h2>
+        <span class="pill" id="month-state">THIS MONTH</span>
       </div>
 
-      <button class="icon-button"
-              type="button"
-              data-close="transaction-dialog">×</button>
+      <div class="progress">
+        <span id="overall-progress"></span>
+      </div>
+
+      <div class="hero-foot">
+        <span id="spent-summary"></span>
+        <span id="left-summary"></span>
+      </div>
+
+      <div class="hero-note" id="hero-note"></div>
+
+    </section>
+
+
+    <!-- SPENDING CATEGORIES -->
+
+    <div class="section-heading">
+      <div>
+        <h2>Where did it go?</h2>
+        <p>പൈസ പോയ വഴികൾ ഒന്ന് നോക്കാം.</p>
+      </div>
+
+      <button class="text-button" id="add-transaction">
+        ＋ Add expense
+      </button>
     </div>
 
-
-    <label>
-      Amount (₹)
-      <input id="tx-amount"
-             type="number"
-             min="1"
-             step="1"
-             inputmode="decimal"
-             placeholder="How much?"
-             required>
-    </label>
+    <section id="spending-list" class="category-list"></section>
 
 
-    <label>
-      Transaction type
-      <select id="tx-type">
-        <option value="spend">Everyday spending</option>
-        <option value="reserve">Use a reserve</option>
-      </select>
-    </label>
+    <!-- PROTECTED FUNDS -->
+
+    <div class="section-heading">
+      <div>
+        <h2>Hands Off! Funds</h2>
+        <p>നല്ല കാര്യത്തിന് മാറ്റിവെച്ചത്.</p>
+      </div>
+    </div>
+
+    <section id="reserve-list" class="category-list"></section>
 
 
-    <label>
-      Category
-      <select id="tx-category" required></select>
-    </label>
+    <!-- RECENT ACTIVITY -->
+
+    <div class="section-heading">
+      <div>
+        <h2>Recent Activity</h2>
+        <p>Where your money went lately.</p>
+      </div>
+    </div>
+
+    <section id="activity-list" class="activity-list"></section>
 
 
-    <label>
-      Date
-      <input id="tx-date" type="date" required>
-    </label>
+    <!-- PRIVACY -->
+
+    <div class="privacy-note">
+      🔒 Your money matters. Your data stays yours.
+      <br>
+      ഇടയ്ക്കൊക്കെ backup എടുത്തേക്കണേ!
+    </div>
+
+  </main>
 
 
-    <label>
-      Note (optional)
-      <input id="tx-note"
-             maxlength="80"
-             placeholder="Chaya, bus, movie...">
-    </label>
+  <!-- BOTTOM NAVIGATION -->
 
+  <nav class="bottom-nav">
 
-    <button class="primary-button" id="tx-submit">
-      Save entry
+    <a href="#top" class="active">
+      ◉
+      <span>Overview</span>
+    </a>
+
+    <button id="quick-add">
+      ＋
+      <span>Add entry</span>
     </button>
 
-  </form>
+    <button id="settings-nav">
+      ⚙
+      <span>My Plan</span>
+    </button>
 
-</dialog>
-
-
-<!-- SETTINGS DIALOG -->
-
-<dialog id="settings-dialog" class="wide-dialog">
-
-  <form id="settings-form">
-
-    <div class="dialog-head">
-      <div>
-        <div class="eyebrow">MAKE IT YOURS</div>
-        <h2>Plan & Settings</h2>
-      </div>
-
-      <button class="icon-button"
-              type="button"
-              data-close="settings-dialog">×</button>
-    </div>
+  </nav>
 
 
-    <div class="settings-scroll">
+  <!-- ADD TRANSACTION DIALOG -->
 
-      <div class="settings-callout">
-        Set your monthly budget, customize categories and manage your reserves.
-        Changes apply to all months. Take control of your money!
-        <br><br>
-        കണക്ക് നിന്റെ കൈയിൽ തന്നെ.
+  <dialog id="transaction-dialog">
+
+    <form id="transaction-form">
+
+      <div class="dialog-head">
+        <div>
+          <div class="eyebrow">KEEP TRACK</div>
+          <h2 id="transaction-title">Add an expense</h2>
+        </div>
+
+        <button class="icon-button"
+                type="button"
+                data-close="transaction-dialog">×</button>
       </div>
 
 
-      <!-- GENERAL SETTINGS -->
+      <label>
+        Amount (₹)
+        <input id="tx-amount"
+               type="number"
+               min="1"
+               step="1"
+               inputmode="decimal"
+               placeholder="How much?"
+               required>
+      </label>
 
-      <div class="settings-grid">
 
-        <label>
-          Currency symbol
-          <input id="set-currency" maxlength="4">
-        </label>
+      <label>
+        Transaction type
+        <select id="tx-type">
+          <option value="spend">Everyday spending</option>
+          <option value="reserve">Use a reserve</option>
+        </select>
+      </label>
 
-        <label>
-          Monthly budget (₹)
-          <input id="set-total" type="number" min="0">
-        </label>
 
-        <label class="full">
-          Tracking starts from
-          <input id="set-start" type="month">
-        </label>
+      <label>
+        Category
+        <select id="tx-category" required></select>
+      </label>
 
-        <label class="full">
-          Are hostel and meal expenses covered separately?
-          <select id="set-essentials">
-            <option value="yes">Yes</option>
-            <option value="no">No - revise the budget</option>
-          </select>
-        </label>
 
+      <label>
+        Date
+        <input id="tx-date" type="date" required>
+      </label>
+
+
+      <label>
+        Note (optional)
+        <input id="tx-note"
+               maxlength="80"
+               placeholder="Chaya, bus, movie...">
+      </label>
+
+
+      <button class="primary-button" id="tx-submit">
+        Save entry
+      </button>
+
+    </form>
+
+  </dialog>
+
+
+  <!-- SETTINGS DIALOG -->
+
+  <dialog id="settings-dialog" class="wide-dialog">
+
+    <form id="settings-form">
+
+      <div class="dialog-head">
+        <div>
+          <div class="eyebrow">MAKE IT YOURS</div>
+          <h2>Plan & Settings</h2>
+        </div>
+
+        <button class="icon-button"
+                type="button"
+                data-close="settings-dialog">×</button>
       </div>
 
 
-      <!-- CATEGORIES -->
+      <div class="settings-scroll">
 
-      <div class="setting-title">
-        <h3>Categories & Monthly Allocations</h3>
-
-        <button class="text-button"
-                id="category-add"
-                type="button">
-          ＋ Add category
-        </button>
-      </div>
-
-      <div id="settings-categories" class="settings-categories"></div>
+        <div class="settings-callout">
+          Set your monthly budget, customize categories and manage your reserves.
+          Changes apply to all months. Take control of your money!
+          <br><br>
+          കണക്ക് നിന്റെ കൈയിൽ തന്നെ.
+        </div>
 
 
-      <!-- ACCOUNTS -->
-
-      <div class="account-settings">
-
-        <h3>Account Labels</h3>
+        <!-- GENERAL SETTINGS -->
 
         <div class="settings-grid">
 
           <label>
-            Everyday spending
-            <input id="set-spend-account">
+            Currency symbol
+            <input id="set-currency" maxlength="4">
           </label>
 
           <label>
-            Protected funds
-            <input id="set-reserve-account">
+            Monthly budget (₹)
+            <input id="set-total" type="number" min="0">
+          </label>
+
+          <label class="full">
+            Tracking starts from
+            <input id="set-start" type="month">
+          </label>
+
+          <label class="full">
+            Are hostel and meal expenses covered separately?
+            <select id="set-essentials">
+              <option value="yes">Yes</option>
+              <option value="no">No - revise the budget</option>
+            </select>
           </label>
 
         </div>
 
-        <p class="muted">
-          Labels only. FUNDA never connects to your bank.
-        </p>
 
-      </div>
+        <!-- CATEGORIES -->
 
+        <div class="setting-title">
+          <h3>Categories & Monthly Allocations</h3>
 
-      <!-- DATA MANAGEMENT -->
-
-      <div class="data-settings">
-
-        <h3>Your Data</h3>
-
-        <p class="muted">
-          Your financial records are stored locally in this browser.
-          Export a backup regularly.
-        </p>
-
-        <div class="button-row">
-
-          <button type="button"
-                  class="secondary-button"
-                  id="export-data">
-            Download backup
+          <button class="text-button"
+                  id="category-add"
+                  type="button">
+            ＋ Add category
           </button>
+        </div>
 
-          <button type="button"
-                  class="secondary-button"
-                  id="import-data">
-            Restore backup
-          </button>
+        <div id="settings-categories" class="settings-categories"></div>
 
-          <input id="import-file"
-                 type="file"
-                 accept="application/json,.json"
-                 hidden>
+
+        <!-- ACCOUNTS -->
+
+        <div class="account-settings">
+
+          <h3>Account Labels</h3>
+
+          <div class="settings-grid">
+
+            <label>
+              Everyday spending
+              <input id="set-spend-account">
+            </label>
+
+            <label>
+              Protected funds
+              <input id="set-reserve-account">
+            </label>
+
+          </div>
+
+          <p class="muted">
+            Labels only. FUNDA never connects to your bank.
+          </p>
 
         </div>
 
-        <button type="button"
-                class="danger-button"
-                id="reset-data">
-          Reset all data
-        </button>
+
+        <!-- DATA MANAGEMENT -->
+
+        <div class="data-settings">
+
+          <h3>Your Data</h3>
+
+          <p class="muted">
+            Your financial records are stored locally in this browser.
+            Export a backup regularly.
+          </p>
+
+          <div class="button-row">
+
+            <button type="button"
+                    class="secondary-button"
+                    id="export-data">
+              Download backup
+            </button>
+
+            <button type="button"
+                    class="secondary-button"
+                    id="import-data">
+              Restore backup
+            </button>
+
+            <input id="import-file"
+                   type="file"
+                   accept="application/json,.json"
+                   hidden>
+
+          </div>
+
+          <button type="button"
+                  class="danger-button"
+                  id="reset-data">
+            Reset all data
+          </button>
+
+        </div>
+
+
+        <p class="muted">
+          FUNDA — Financially Unstable, Never Done Adjusting.
+          <br>
+          Open source under the MIT License.
+        </p>
 
       </div>
 
 
-      <p class="muted">
-        FUNDA — Financially Unstable, Never Done Adjusting.
-        <br>
-        Open source under the MIT License.
-      </p>
+      <button class="primary-button sticky-save">
+        Save changes
+      </button>
 
-    </div>
+    </form>
 
-
-    <button class="primary-button sticky-save">
-      Save changes
-    </button>
-
-  </form>
-
-</dialog>
+  </dialog>
 
 
-<!-- TOAST NOTIFICATION -->
+  <!-- TOAST NOTIFICATION -->
 
-<div id="toast" role="status" aria-live="polite"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
 
 
-<!-- APPLICATION SCRIPT -->
+  <!-- APPLICATION SCRIPT -->
 
-<script src="./app.js"></script>
+  <script src="./app.js?v=2"></script>
 
 </body>
 </html>
