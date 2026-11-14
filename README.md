@@ -4,7 +4,7 @@ A phone-friendly personal budget tracker made with plain HTML, CSS and JavaScrip
 
 ## Run and install
 
-For a preview, open index.html in a browser. To install on a phone and use offline, publish these files to a static web host over HTTPS. One open source route is to create a public GitHub repository, add the files, and enable GitHub Pages in repository settings. Open the HTTPS site on the phone and choose Add to Home Screen in iPhone Safari or Install app in Android Chrome.
+For a preview, open index.html in a browser. To install on a phone and use offline, publish these files to a static web host over HTTPS. open source .Open the HTTPS site on the phone and choose Add to Home Screen in iPhone Safari or Install app in Android Chrome.
 
 ## Included budget
 
